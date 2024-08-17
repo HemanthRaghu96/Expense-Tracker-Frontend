@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { api } from "../../api/api";
 
 export const ExpenseForm = () => {
+  // Predefined list of categories for the expense
   const listOfCategories = [
     "Food",
     "Transport",
@@ -13,6 +14,8 @@ export const ExpenseForm = () => {
     "Shopping",
     "Others",
   ];
+
+  // State variables to manage form inputs and expense data
   const [amount, setAmount] = useState("");
   const [categories, setCategories] = useState(listOfCategories);
   const [category, setCategory] = useState(categories[0]);
@@ -20,10 +23,12 @@ export const ExpenseForm = () => {
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [description, setDescription] = useState("");
 
+  // Fetches all expenses when the component mounts
   useEffect(() => {
     getAllExpenses();
   }, []);
 
+  // Function to get all expenses from the API
   const getAllExpenses = async () => {
     try {
       const response = await axios.get(`${api}/expenses`);
@@ -33,11 +38,13 @@ export const ExpenseForm = () => {
     }
   };
 
+  // Handles the form submission to add a new expense
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevents the default form submission
     const newExpense = { amount, category, date, description };
     try {
       const response = await axios.post(`${api}/expenses`, newExpense);
+      // Adds the new expense to the list of expenses and resets form fields
       setExpenses([...expenses, response.data]);
       setAmount("");
       setCategory(categories[0]);
@@ -48,6 +55,7 @@ export const ExpenseForm = () => {
     }
   };
 
+  // Optionally, handles the addition of an expense (not used in the form submission)
   const handleAddedExpense = async () => {
     const newExpense = { amount, category, date, description };
     try {
@@ -59,63 +67,69 @@ export const ExpenseForm = () => {
   };
 
   return (
-    <>
-    
-      <div className="flex flex-col justify-center items-center mt-32">
+    <div className="flex flex-col justify-center items-center mt-32">
       <h1 className="text-2xl font-bold">Add Expense</h1>
-        <form
-          onSubmit={handleSubmit}
-          className="p-4 bg-white rounded-lg shadow-md mt-3"
-        >
-          <div className="mb-4">
-            <label className="block text-gray-700">Amount</label>
-            <input
-              type="number"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              required
-              className="w-full p-2 border border-gray-300 rounded mt-1"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Category</label>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
-            >
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Date</label>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Description</label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white p-2 rounded"
+      <form
+        onSubmit={handleSubmit}
+        className="p-4 bg-white rounded-lg shadow-md mt-3"
+      >
+        {/* Input for the expense amount */}
+        <div className="mb-4">
+          <label className="block text-gray-700">Amount</label>
+          <input
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            required
+            className="w-full p-2 border border-gray-300 rounded mt-1"
+          />
+        </div>
+
+        {/* Dropdown to select the expense category */}
+        <div className="mb-4">
+          <label className="block text-gray-700">Category</label>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded mt-1"
           >
-            Add Expense
-          </button>
-        </form>
-      </div>
-    </>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Input for the expense date */}
+        <div className="mb-4">
+          <label className="block text-gray-700">Date</label>
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded mt-1"
+          />
+        </div>
+
+        {/* Text area for the expense description */}
+        <div className="mb-4">
+          <label className="block text-gray-700">Description</label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded mt-1"
+          />
+        </div>
+
+        {/* Submit button to add the expense */}
+        <button
+          type="submit"
+          className="w-full bg-blue-500 text-white p-2 rounded"
+        >
+          Add Expense
+        </button>
+      </form>
+    </div>
   );
 };
