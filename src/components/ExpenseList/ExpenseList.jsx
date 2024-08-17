@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { api } from "../../api/api";
+import { Chart } from "../Chart/Chart";
 
 export default function ExpenseList() {
   const [data, setData] = useState([]);
@@ -10,11 +11,18 @@ export default function ExpenseList() {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); 
   const [categoryTotals, setCategoryTotals] = useState({});
 
-  // Light color options
-  const lightColors = [
-    'bg-blue-200', 'bg-green-200', 'bg-yellow-200', 'bg-red-200',
-    'bg-purple-200', 'bg-pink-200', 'bg-indigo-200', 'bg-teal-200'
-  ];
+  // Fixed color options for categories
+  const categoryColors = {
+    Food: 'bg-blue-200',
+    Transport: 'bg-green-200',
+    Entertainment: 'bg-yellow-200',
+    Utilities: 'bg-red-200',
+    Others: 'bg-purple-200',
+    Health:'bg-pink-200',
+    Groceries:'bg-teal-200',
+    Shopping:'bg-indigo-200'
+    // Add more categories and their colors here
+  };
 
   // Category image mapping with internet URLs
   const categoryImages = {
@@ -25,6 +33,7 @@ export default function ExpenseList() {
     Health: 'https://example.com/health-icon.png',
     Groceries:'https://cdn-icons-png.flaticon.com/512/1261/1261163.png',
     Shopping:'data:image/png;base64,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'
+    
     // Add more categories and their images here
   };
 
@@ -72,12 +81,6 @@ export default function ExpenseList() {
     setCategoryTotals(totals);
   };
 
-  // Function to get a random color from the lightColors array
-  const getRandomColor = () => {
-    const randomIndex = Math.floor(Math.random() * lightColors.length);
-    return lightColors[randomIndex];
-  };
-
   // Create an array of month options
   const months = [
     "January", "February", "March", "April", "May", "June", "July",
@@ -89,16 +92,16 @@ export default function ExpenseList() {
   const years = Array.from({ length: currentYear - 2019 }, (_, i) => currentYear - i);
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 px-4 md:px-8 lg:px-16">
       <div className="flex flex-col justify-center items-center">
-        <h1 className="font-bold text-3xl">₹{totalBalance}</h1>
-        <h2 className="font-semibold text-gray-500 text-xl">Total Balance</h2>
+        <h1 className="font-bold text-3xl md:text-4xl lg:text-5xl">₹{totalBalance}</h1>
+        <h2 className="font-semibold text-gray-500 text-xl md:text-2xl lg:text-3xl">Total Balance</h2>
       </div>
-      <div className="flex justify-center mt-4 space-x-4">
+      <div className="flex flex-col sm:flex-row justify-center mt-4 space-y-4 sm:space-y-0 sm:space-x-4">
         <select
           value={selectedMonth}
           onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-          className="px-4 py-2 border rounded-2xl bg-gray-200"
+          className="px-4 py-2 border rounded-2xl bg-gray-200 text-sm sm:text-base"
         >
           {months.map((month, index) => (
             <option key={index} value={index}>{month}</option>
@@ -107,18 +110,18 @@ export default function ExpenseList() {
         <select
           value={selectedYear}
           onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-          className="px-4 py-2 border rounded-2xl bg-gray-200"
+          className="px-4 py-2 border rounded-2xl bg-gray-200 text-sm sm:text-base"
         >
           {years.map(year => (
             <option key={year} value={year}>{year}</option>
           ))}
         </select>
       </div>
-      <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mx-auto w-[600px] ">
+      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mx-auto max-w-4xl">
         {Object.keys(categoryTotals).map(category => (
           <div 
             key={category} 
-            className={`mt-2 rounded-2xl ${getRandomColor()} flex flex-col justify-center items-center h-[150px] w-[170px] p-4`}
+            className={`mt-2 rounded-2xl ${categoryColors[category] || 'bg-gray-200'} flex flex-col justify-center items-center h-[150px] w-[170px] p-4`}
           >
             <img
               src={categoryImages[category]}
@@ -130,6 +133,9 @@ export default function ExpenseList() {
           </div>
         ))}
       </div>
-    </div>
+      <div className="flex justify-center items-center mt-5">
+        <Chart expenses={filteredData} />
+      </div>
+    </div>  
   );
 }
