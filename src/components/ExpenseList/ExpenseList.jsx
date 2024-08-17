@@ -117,7 +117,7 @@ export default function ExpenseList() {
           ))}
         </select>
       </div>
-      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mx-auto max-w-4xl">
+      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mx-auto max-w-4xl ">
         {Object.keys(categoryTotals).map(category => (
           <div 
             key={category} 
@@ -128,8 +128,8 @@ export default function ExpenseList() {
               alt={category}
               className="w-12 h-12 mb-2 rounded-full object-contain"
             />
-            <h3 className="font-bold text-xl">{category}</h3>
-            <p className="text-gray-600">₹{categoryTotals[category].toFixed(2)}</p>
+            <h3 className="font-bold text-xl bg-transparent">{category}</h3>
+            <p className="text-gray-600 bg-transparent">₹{categoryTotals[category].toFixed(2)}</p>
           </div>
         ))}
       </div>

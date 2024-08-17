@@ -5,8 +5,9 @@ export const Dashboard = () => {
   
   return (
    <>
-   {/* <ExpenseList /> */}
-   <ExpenseForm />
+   <ExpenseList />
+   {/* <ExpenseForm /> */}
+  
    </>
   )
 }
