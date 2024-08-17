@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { api } from "../../api/api";
 import { useNavigate } from "react-router-dom";
+import { MdEdit } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 
 export const ExpenseList = () => {
   const [data, setData] = useState([]);
@@ -69,6 +71,26 @@ export const ExpenseList = () => {
     navigate("/addexpense");
   };
 
+  // Handle navigation to expense details page
+  const handleRowClick = (id) => {
+    navigate(`/expense/${id}`);
+  };
+
+  // Handle navigation to edit expense page
+  const handleEdit = (id) => {
+    navigate(`/expense-list/edit/${id}`);
+  };
+
+  // Handle deletion of an expense
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`${api}/expenses/${id}`);
+      setData(data.filter((expense) => expense._id !== id));
+    } catch (error) {
+      console.error("Failed to delete expense:", error);
+    }
+  };
+
   return (
     <div className="flex flex-col justify-center items-center mb-20">
       <div className="flex justify-between items-center">
@@ -126,20 +148,45 @@ export const ExpenseList = () => {
       {Object.keys(groupedExpenses).map((category) => (
         <div key={category}>
           <h3 className="text-2xl font-bold mt-5">{category}</h3>
-          <table className="mt-2 w-[400px] ">
+          <table className="mt-2 w-[600px] table-auto border-collapse border border-black">
             <thead>
               <tr>
-                <th className="text-left">Description</th>
-                <th className="text-left">Amount</th>
-                <th className="text-left">Date</th>
+                <th className="w-1/4 px-4 py-2 border border-black">Description</th>
+                <th className="w-1/4 px-4 py-2 border border-black">Amount</th>
+                <th className="w-1/4 px-4 py-2 border border-black">Date</th>
+                <th className="w-1/4 px-4 py-2 border border-black">Actions</th>
               </tr>
             </thead>
             <tbody>
               {groupedExpenses[category].map((expense) => (
-                <tr key={expense._id}>
-                  <td>{expense.description}</td>
-                  <td>₹{expense.amount}</td>
-                  <td>{new Date(expense.date).toLocaleDateString()}</td>
+                <tr
+                  key={expense._id}
+                  className="cursor-pointer hover:bg-gray-100"
+                  onClick={() => handleRowClick(expense._id)}
+                >
+                  <td className="px-4 py-2 border border-black">{expense.description}</td>
+                  <td className="px-4 py-2 border border-black">₹{expense.amount}</td>
+                  <td className="px-4 py-2 border border-black">{new Date(expense.date).toLocaleDateString()}</td>
+                  <td className="px-4 py-2 border border-black">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEdit(expense._id);
+                      }}
+                      className="mr-2 px-3 py-1 bg-blue-400 text-white rounded"
+                    >
+                      <MdEdit className="bg-transparent" />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(expense._id);
+                      }}
+                      className="px-3 py-1 bg-red-400 text-white rounded"
+                    >
+                      <MdDelete className="bg-transparent" />
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
