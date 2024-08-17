@@ -104,7 +104,7 @@ export default function ExpenseList() {
           className="px-4 py-2 border rounded-2xl bg-gray-200 text-sm sm:text-base"
         >
           {months.map((month, index) => (
-            <option key={index} value={index}>{month}</option>
+            <option key={index} value={index} className='bg-gray-200'>{month}</option>
           ))}
         </select>
         <select
@@ -113,7 +113,7 @@ export default function ExpenseList() {
           className="px-4 py-2 border rounded-2xl bg-gray-200 text-sm sm:text-base"
         >
           {years.map(year => (
-            <option key={year} value={year}>{year}</option>
+            <option key={year} value={year} className='bg-gray-200'>{year}</option>
           ))}
         </select>
       </div>

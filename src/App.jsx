@@ -6,6 +6,7 @@ import { Navbar } from "./components/Navbar/Navbar";
 import { Login } from "./pages/Login/Login";
 import { ExpenseList } from "./pages/ExpenseList/ExpenseList";
 import { Account } from "./pages/Account/Account";
+import { ExpenseForm } from "./components/ExpenseForm/ExpenseForm";
 
 function App() {
   return <>
@@ -16,6 +17,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/expense-list" element={<ExpenseList />} />
+      <Route path="/addexpense" element={<ExpenseForm/>} />
       <Route path="/account" element={<Account />} />
     </Routes>
     </BrowserRouter>
