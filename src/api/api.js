@@ -1,1 +1,1 @@
-export  const api="http://localhost:5000"
+export  const api="https://expense-tracker-backend-8b23.onrender.com"
