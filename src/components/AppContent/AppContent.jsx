@@ -7,6 +7,7 @@ import { ExpenseList } from "../../pages/ExpenseList/ExpenseList";
 import { Account } from "../../pages/Account/Account";
 import { ExpenseForm } from "../../components/ExpenseForm/ExpenseForm";
 import UpdateExpenseForm from "../../components/UpdateExpenseForm/UpdateExpenseForm";
+import { Signup } from "../../pages/Signup/Signup";
 export default function AppContent() {
   const location = useLocation();
   const hideNavbarPaths = ["/"]; // Paths where Navbar should be hidden
@@ -17,6 +18,7 @@ export default function AppContent() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/expense-list" element={<ExpenseList />} />
         <Route path="/addexpense" element={<ExpenseForm />} />
