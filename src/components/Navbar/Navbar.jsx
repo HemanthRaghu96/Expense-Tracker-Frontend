@@ -48,9 +48,9 @@ export const Navbar = () => {
                 <li className="mx-3 font-bold text-xl text-orange-900 cursor-pointer">
                     <Link to={'/expense-list'}>Expense List</Link>
                 </li>
-                <li className="mx-3 font-bold text-xl text-orange-900 cursor-pointer">
+                {/* <li className="mx-3 font-bold text-xl text-orange-900 cursor-pointer">
                     <Link to={'/account'}>Account</Link>
-                </li>
+                </li> */}
             </ul>
             {isLoggedIn ? (
                 <button 

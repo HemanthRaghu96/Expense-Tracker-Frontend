@@ -4,6 +4,7 @@ import { api } from "../../api/api";
 import { useNavigate } from "react-router-dom";
 import { MdEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
+import { saveAs } from 'file-saver';
 
 export const ExpenseList = () => {
   const [data, setData] = useState([]);
@@ -55,6 +56,23 @@ export const ExpenseList = () => {
 
   // Group filtered expenses by category
   const groupedExpenses = groupByCategory(filteredData);
+
+  // Function to generate CSV data
+  const generateCSV = (expenses) => {
+    const header = "Description,Amount,Date\n";
+    const rows = expenses.map(expense => {
+      const date = new Date(expense.date).toLocaleDateString();
+      return `${expense.description},${expense.amount},${date}`;
+    }).join("\n");
+
+    return new Blob([header + rows], { type: "text/csv;charset=utf-8" });
+  };
+
+  // Function to handle CSV export
+  const handleExportCSV = () => {
+    const csvData = generateCSV(filteredData);
+    saveAs(csvData, 'expenses.csv');
+  };
 
   // Handle month selection change
   const handleMonthChange = (e) => {
@@ -133,13 +151,21 @@ export const ExpenseList = () => {
             </select>
           </div>
         </div>
-        <div className="ml-10">
+        <div className="ml-10 flex items-center">
           {/* Button to navigate to add expense page */}
           <button
-            className="mx-3 font-bold text-xl mr-32 bg-orange-900 px-4 py-2 rounded-lg text-[#f0e6d7]"
+            className="mx-3 font-bold text-xl mr-4 bg-orange-900 px-4 py-2 rounded-lg text-[#f0e6d7]"
             onClick={handleAddExpense}
           >
             Add Expense
+          </button>
+
+          {/* Button to export CSV data */}
+          <button
+            className="font-bold text-xl bg-green-600 px-4 py-2 rounded-lg text-white"
+            onClick={handleExportCSV}
+          >
+            Export CSV
           </button>
         </div>
       </div>
