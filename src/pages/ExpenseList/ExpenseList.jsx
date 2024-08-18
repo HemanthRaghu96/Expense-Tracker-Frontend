@@ -73,7 +73,7 @@ export const ExpenseList = () => {
 
   // Handle navigation to expense details page
   const handleRowClick = (id) => {
-    navigate(`/expense/${id}`);
+    navigate(`/expense-list/edit/${id}`);
   };
 
   // Handle navigation to edit expense page
